@@ -1,33 +1,61 @@
 <?php
 require_once __DIR__ .'/vendor/autoload.php';
 
-trait Trait1 {
-    public function test() {
-        return 1;
+class User {
+    private $name;
+    private $age;
+    private $email;
+
+    public function __construct($name, $age, $email) {
+        $this->setName($name);
+        $this->setAge($age);
+        $this->setEmail($email);
+    }
+
+    private function setName($name) {
+        $this->name = $name;
+    }
+
+    private function setAge($age) {
+        $this->age = $age;
+    }
+
+    private function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function getAll() {
+        return [
+            'name' => $this->name,
+            'age' => $this->age,
+            'email' => $this->email
+        ];
+    }
+
+    public function __call($method, $args) {
+        if (strpos($method, 'set') === 0) {
+            $property = lcfirst(substr($method, 3));
+            if (property_exists($this, $property)) {
+                $this->$property = $args[0];
+            } else {
+                throw new CustomException("Метода $method нет");
+            }
+        } else {
+            throw new CustomException("Метода $method нет");
+        }
     }
 }
 
-trait Trait2 {
-    public function test() {
-        return 2;
-    }
-}
+class CustomException extends Exception {}
 
-trait Trait3 {
-    public function test() {
-        return 3;
-    }
-}
-class Test {
-    use Trait1, Trait2, Trait3 {
-        Trait1::test insteadof Trait2, Trait3;
-        Trait2::test as testTrait2;
-        Trait3::test as testTrait3;
-    }
-    public function getSum() {
-        return $this->test() + $this->testTrait2() + $this->testTrait3();
-    }
-}
+try {
+    $user = new User("Zahar", 20, "zvozikov@gmail.com
+");
 
-$testObject = new Test();
-dd($testObject->getSum());
+    $user->setAge(20);
+
+    $userData = $user->getAll();
+    print_r($userData);
+} catch (CustomException $e) {
+    echo 'Помилка: ' . $e->getMessage();
+}
