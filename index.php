@@ -1,61 +1,59 @@
 <?php
 require_once __DIR__ .'/vendor/autoload.php';
 
-class User {
-    private $name;
-    private $age;
-    private $email;
+class ProductData {
+    public function get($name) {}
+    public function set($name, $value) {}
+    public function save() {}
+    public function update() {}
+    public function delete() {}
+}
 
-    public function __construct($name, $age, $email) {
-        $this->setName($name);
-        $this->setAge($age);
-        $this->setEmail($email);
+class ProductProcessor {
+    public function process() {}
+}
+
+class ProductOutput {
+    public function show($data) {
+        echo "Product Information:\n";
+        echo "Name: " . $data['name'] . "\n";
+        echo "Price: " . $data['price'] . "\n";
+        echo "Category: " . $data['category'] . "\n";
+    }
+    public function print($data) {
+        $output = "Product Information:\n";
+        $output .= "Name: " . $data['name'] . "\n";
+        $output .= "Price: " . $data['price'] . "\n";
+        $output .= "Category: " . $data['category'] . "\n";
+
+        return $output;
+    }
+    public function displayAsJSON($data)
+    {
+        return json_encode($data);
     }
 
-    private function setName($name) {
-        $this->name = $name;
-    }
+    public function renderAsHTML($data) {
+        $html = "<div class='product'>";
+        $html .= "<h2>{$data['name']}</h2>";
+        $html .= "<p>Price: {$data['price']}</p>";
+        $html .= "<p>Category: {$data['category']}</p>";
+        $html .= "</div>";
 
-    private function setAge($age) {
-        $this->age = $age;
-    }
-
-    private function setEmail($email) {
-        $this->email = $email;
-    }
-
-    public function getAll() {
-        return [
-            'name' => $this->name,
-            'age' => $this->age,
-            'email' => $this->email
-        ];
-    }
-
-    public function __call($method, $args) {
-        if (strpos($method, 'set') === 0) {
-            $property = lcfirst(substr($method, 3));
-            if (property_exists($this, $property)) {
-                $this->$property = $args[0];
-            } else {
-                throw new CustomException("Метода $method нет");
-            }
-        } else {
-            throw new CustomException("Метода $method нет");
-        }
+        return $html;
     }
 }
 
-class CustomException extends Exception {}
+$productData = ['name' => 'Example Product', 'price' => 50.00, 'category' => 'Electronics'];
 
-try {
-    $user = new User("Zahar", 20, "zvozikov@gmail.com
-");
+$outputHandler = new ProductOutput();
+$outputHandler->show($productData);
 
-    $user->setAge(20);
+$outputString = $outputHandler->print($productData);
+dd($outputString);
 
-    $userData = $user->getAll();
-    print_r($userData);
-} catch (CustomException $e) {
-    echo 'Помилка: ' . $e->getMessage();
-}
+$jsonOutput = $outputHandler->displayAsJSON($productData);
+dd($jsonOutput);
+
+$htmlOutput = $outputHandler->renderAsHTML($productData);
+dd($htmlOutput);
