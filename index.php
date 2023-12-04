@@ -35,13 +35,13 @@ class User {
     public function __call($method, $args) {
         if (strpos($method, 'set') === 0) {
             $property = lcfirst(substr($method, 3));
-            if (property_exists($this, $property)) {
-                $this->$property = $args[0];
+            if (property_exists($this, $property) && method_exists($this, $method)) {
+                call_user_func_array([$this, $method], $args);
             } else {
-                throw new CustomException("Метода $method нет");
+                throw new CustomException("Метода $method не існує");
             }
         } else {
-            throw new CustomException("Метода $method нет");
+            throw new CustomException("Метода $method не існує");
         }
     }
 }
