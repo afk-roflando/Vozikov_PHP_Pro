@@ -1,59 +1,75 @@
 <?php
 require_once __DIR__ .'/vendor/autoload.php';
 
-class ProductData {
-    public function get($name) {}
-    public function set($name, $value) {}
-    public function save() {}
-    public function update() {}
-    public function delete() {}
+interface FormatterInterface
+{
+    public function format($string);
 }
 
-class ProductProcessor {
-    public function process() {}
-}
-
-class ProductOutput {
-    public function show($data) {
-        echo "Product Information:\n";
-        echo "Name: " . $data['name'] . "\n";
-        echo "Price: " . $data['price'] . "\n";
-        echo "Category: " . $data['category'] . "\n";
-    }
-    public function print($data) {
-        $output = "Product Information:\n";
-        $output .= "Name: " . $data['name'] . "\n";
-        $output .= "Price: " . $data['price'] . "\n";
-        $output .= "Category: " . $data['category'] . "\n";
-
-        return $output;
-    }
-    public function displayAsJSON($data)
+class RawFormatter implements FormatterInterface
+{
+    public function format($string)
     {
-        return json_encode($data);
-    }
-
-    public function renderAsHTML($data) {
-        $html = "<div class='product'>";
-        $html .= "<h2>{$data['name']}</h2>";
-        $html .= "<p>Price: {$data['price']}</p>";
-        $html .= "<p>Category: {$data['category']}</p>";
-        $html .= "</div>";
-
-        return $html;
+        return $string;
     }
 }
 
-$productData = ['name' => 'Example Product', 'price' => 50.00, 'category' => 'Electronics'];
+class DateFormatter implements FormatterInterface
+{
+    public function format($string)
+    {
+        return date('Y-m-d H:i:s') . $string;
+    }
+}
 
-$outputHandler = new ProductOutput();
-$outputHandler->show($productData);
+interface DeliveryInterface
+{
+    public function deliver($format);
+}
 
-$outputString = $outputHandler->print($productData);
-dd($outputString);
+class EmailDelivery implements DeliveryInterface
+{
+    public function deliver($format)
+    {
+        echo "Вывод формата ({$format}) по имейл";
+    }
+}
 
-$jsonOutput = $outputHandler->displayAsJSON($productData);
-dd($jsonOutput);
+class SmsDelivery implements DeliveryInterface
+{
+    public function deliver($format)
+    {
+        echo "Вывод формата ({$format}) в смс";
+    }
+}
 
-$htmlOutput = $outputHandler->renderAsHTML($productData);
-dd($htmlOutput);
+class ConsoleDelivery implements DeliveryInterface
+{
+    public function deliver($format)
+    {
+        echo "Вывод формата ({$format}) в консоль";
+    }
+}
+
+class Logger
+{
+    private $formatter;
+    private $delivery;
+
+    public function __construct(FormatterInterface $formatter, DeliveryInterface $delivery)
+    {
+        $this->formatter = $formatter;
+        $this->delivery = $delivery;
+    }
+
+    public function log($string)
+    {
+        $this->delivery->deliver($this->formatter->format($string));
+    }
+}
+
+$rawFormatter = new RawFormatter();
+$emailDelivery = new EmailDelivery();
+
+$logger = new Logger($rawFormatter, $emailDelivery);
+$logger->log('Emergency error! Please fix me!');
