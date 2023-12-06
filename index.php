@@ -1,23 +1,30 @@
 <?php
 require_once __DIR__ .'/vendor/autoload.php';
 
-interface Eater
+interface Database
 {
-    public function eat();
+    public function getData();
 }
 
-interface Flyer
+class Mysql implements Database
 {
-    public function fly();
+    public function getData()
+    {
+        return 'some data from MySQL database';
+    }
 }
 
-class Swallow implements Eater, Flyer
+class Controller
 {
-    public function eat() {}
-    public function fly() {}
-}
+    private $adapter;
 
-class Ostrich implements Eater
-{
-    public function eat() {}
+    public function __construct(Database $database)
+    {
+        $this->adapter = $database;
+    }
+
+    public function getData()
+    {
+        return $this->adapter->getData();
+    }
 }
