@@ -1,0 +1,33 @@
+version: "3.8"
+
+volumes:
+  database_volume:
+    driver: local
+
+networks:
+  php_kek:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: .docker/php
+    restart: always
+    volumes:
+      - .:/var/www/html/
+    ports:
+      - "8082:80"
+    networks:
+      - php_kek
+
+  base:
+    image: 'mysql:8'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: KJKszpj
+    ports:
+      - "33069:3306"
+    volumes:
+      - "database_volume:/var/lib/mysql"
+    networks:
+      - php_kek
