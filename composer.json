@@ -2,10 +2,13 @@
     "name": "root/html",
     "autoload": {
         "psr-4": {
-            "app\\": "app/",
-            "config\\": "config/",
-            "core\\": "core/"
-        }
+            "App\\": "app/",
+            "Config\\": "config/",
+            "Core\\": "core/"
+        },
+        "files": [
+            "router/web.php"
+        ]
     },
     "require": {
         "larapack/dd": "^1.1",

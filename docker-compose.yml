@@ -26,7 +26,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: KJKszpj
     ports:
-      - "33069:3306"
+      - "33070:3306"
     volumes:
       - "database_volume:/var/lib/mysql"
     networks:
