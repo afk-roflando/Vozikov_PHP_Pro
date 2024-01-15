@@ -1,8 +1,8 @@
 <?php
 
-namespace core;
+namespace Core;
 
-class control
+abstract class Controller
 {
     public function before(string $action, array $params = []): bool
     {

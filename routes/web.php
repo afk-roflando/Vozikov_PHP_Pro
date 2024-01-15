@@ -1,11 +1,11 @@
 <?php
 
-use core\router;
+use Core\Router;
 
 Router::add(
     'users',
     [
-        'controller' => \App\Control\UserControl::class,
+        'controller' => \app\control\UserControl::class,
         'action' => 'index',
         'method' => 'GET'
     ]
@@ -14,7 +14,7 @@ Router::add(
 Router::add(
     'users/{id:\d+}',
     [
-        'controller' => \App\Control\UserControl::class,
+        'controller' => \app\control\UserControl::class,
         'action' => 'show',
         'method' => 'GET'
     ]
@@ -23,7 +23,6 @@ Router::add(
 Router::add(
     'users/{id:\d+}/edit',
     [
-
         'method' => 'GET'
     ]
 );
@@ -31,7 +30,7 @@ Router::add(
 Router::add(
     'users/{id:\d+}/update',
     [
-        'controller' => \App\Control\UserControl::class,
+        'controller' => \app\control\UserControl::class,
         'action' => 'update',
         'method' => 'POST'
     ]

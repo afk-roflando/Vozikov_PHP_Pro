@@ -1,10 +1,10 @@
 <?php
 
-namespace App\control;
+namespace app\control;
 
-use Core\control;
+use Core\Controller;
 
-class UserControl extends control
+class UserControl extends Controller
 {
     public function index()
     {

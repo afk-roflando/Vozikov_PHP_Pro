@@ -2,7 +2,7 @@
 
 namespace Core;
 
-class router
+class Router
 {
     static protected array $routes = [], $params = [];
 
@@ -20,26 +20,33 @@ class router
         static::$routes[$route] = $params;
     }
 
+
+
     static public function dispatch(string $uri): void
     {
+
         $uri = trim($uri, '/');
 
-        if (static::match($uri)) {
-            // check HTTP method
-            static::checkRequestMethod();
+        foreach (static::$routes as $route => $params) {
+            if (preg_match($route, $uri, $matches)) {
+                static::$params = static::buildParams($route, $matches, $params);
 
-            // get controller
-            $controller = static::getController();
-            $action = static::getAction($controller);
+                static::checkRequestMethod();
 
-            if ($controller->before($action, static::$params)) {
-                call_user_func_array([$controller, $action], static::$params);
-                $controller->after($action);
+                $controller = static::getController();
+                $action = static::getAction($controller);
+
+                if ($controller->before($action, static::$params)) {
+                    call_user_func_array([$controller, $action], static::$params);
+                    $controller->after($action);
+
+                }
+
+                return;
             }
         }
     }
-
-    static protected function getAction(control $controller): string
+    static protected function getAction(Controller $controller): string
     {
         $action = static::$params['action'] ?? null;
 
@@ -52,7 +59,7 @@ class router
         return $action;
     }
 
-    static protected function getController(): control
+    static protected function getController(): Controller
     {
         $controller = static::$params['controller'] ?? null;
 
@@ -67,6 +74,7 @@ class router
 
     static protected function checkRequestMethod()
     {
+        d(static::$params, $_SERVER);
         if (array_key_exists('method', static::$params)) {
             $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -84,16 +92,19 @@ class router
         preg_match_all('/\(\?P<[\w]+>(\\\\)?([\w\.][\+]*)\)/', $route, $types);
         $matches = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
+
         if (!empty($types)) {
             $lastKey = array_key_last($types);
             $step = 0;
             $types[$lastKey] = array_map(fn($value) => str_replace('+', '', $value), $types[$lastKey]);
+
 
             foreach ($matches as $name => $match) {
                 settype($match, static::$convertTypes[$types[$lastKey][$step]]);
                 $params[$name] = $match;
                 $step++;
             }
+
         }
 
         return $params;
