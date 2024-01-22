@@ -22,9 +22,9 @@ class Router
 
 
 
-    static public function dispatch(string $uri): void
+    public static function dispatch(string $uri): string|bool
     {
-
+        $data = [];
         $uri = trim($uri, '/');
 
         foreach (static::$routes as $route => $params) {
@@ -37,14 +37,14 @@ class Router
                 $action = static::getAction($controller);
 
                 if ($controller->before($action, static::$params)) {
-                    call_user_func_array([$controller, $action], static::$params);
+                    $data = call_user_func_array([$controller, $action], static::$params);
                     $controller->after($action);
-
                 }
-
-                return;
             }
         }
+
+
+        return json_response(200, data: $data);
     }
     static protected function getAction(Controller $controller): string
     {

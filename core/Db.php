@@ -8,13 +8,11 @@ class Db
 {
     protected static PDO|null $instance = null;
 
-
-
     static public function connect(): PDO
     {
         if (is_null(static::$instance))
         {
-            $dsn = "mysql:host=base;dbname=mvc_db";
+            $dsn = "mysql:host=". config('db.host') .";dbname=" . config('db.database');
             $options =
                 [
                     PDO::ATTR_DEFAULT_FETCH_MODE =>PDO::FETCH_ASSOC,
@@ -22,10 +20,10 @@ class Db
                 ];
             static::$instance = new PDO
             (
-                $dsn,
-                'root',
-                'KJKszpj',
-                $options
+                dsn: $dsn,
+                username: config('db.user'),
+                password: config('db.password'),
+                options: $options
             );
         }
         return static::$instance;
