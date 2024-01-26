@@ -3,6 +3,7 @@
 namespace App\Models;
 
 class User extends \Core\Model
+
 {
     protected static string|null $tableName = 'users';
 

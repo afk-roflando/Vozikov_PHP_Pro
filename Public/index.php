@@ -4,7 +4,7 @@ use App\Models\User;
 
 define('BASE_DIR', dirname(__DIR__));
 
-require_once BASE_DIR . '/config/const.php';
+require_once BASE_DIR . '/Config/const.php';
 require_once BASE_DIR . '/vendor/autoload.php';
 
 

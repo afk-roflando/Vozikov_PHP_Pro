@@ -2,7 +2,7 @@
 
 define('BASE_DIR', dirname(__DIR__));
 
-require_once BASE_DIR . '/config/const.php';
+require_once BASE_DIR . '/Config/const.php';
 require_once BASE_DIR . '/vendor/autoload.php';
 
 $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(BASE_DIR);
@@ -39,7 +39,7 @@ class Migration
 
     protected function runMigrations(): void
     {
-        d('---- Fetching migrations ----');
+        d('---- Fetching Migrations ----');
 
         $migrations = scandir(static::SCRIPTS_DIR);
         $migrations = array_values(array_diff(
@@ -72,7 +72,7 @@ class Migration
 
     protected function logIntoMigrations(string $migration): void
     {
-        $query = db()->prepare("INSERT INTO migrations (name) VALUES (:name)");
+        $query = db()->prepare("INSERT INTO Migrations (name) VALUES (:name)");
         $query->bindParam('name', $migration);
         $query->execute();
     }
@@ -80,7 +80,7 @@ class Migration
 
     protected function checkIfMigrationWasRun($migration): bool
     {
-        $query = db()->prepare("SELECT id FROM migrations WHERE name = :name");
+        $query = db()->prepare("SELECT id FROM Migrations WHERE name = :name");
         $query->bindParam('name', $migration);
         $query->execute();
 

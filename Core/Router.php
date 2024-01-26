@@ -44,7 +44,7 @@ class Router
         }
 
 
-        return json_response(200, data: $data);
+        return json_response(200, $data);
     }
     static protected function getAction(Controller $controller): string
     {

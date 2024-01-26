@@ -10,7 +10,7 @@ function requestBody(): array
 
     if (!empty($requestBody))
     {
-        $data =json_decode($requestBody, true);
+        $data = json_decode($requestBody, true);
     }
     return $data;
 }
@@ -20,11 +20,11 @@ function json_response($code = 200, array $data = []): string
 {
     header_remove();
 
-    http_response_code($code);
+    http_response_code(response_code: $code);
 
-    header("Cache-Control: no-transform, public, max-age=300, s-maxage=900");
+    header("Cache-Control: no-transform, Public, max-age=300, s-maxage=900");
 
-    header("Content-Type: application/json");
+    header('Content-Type: application/json');
     $status = array
     (
         200 => '200 OK',

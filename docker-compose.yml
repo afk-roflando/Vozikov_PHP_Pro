@@ -19,6 +19,7 @@ services:
       - "8082:80"
     networks:
       - php_kek
+    mem_limit: 512m
 
   base:
     image: 'mysql:8'

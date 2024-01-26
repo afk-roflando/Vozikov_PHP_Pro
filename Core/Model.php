@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use Core\Traits\Queryable;
+use Core1\Traits\Queryable;
 
 abstract class Model
 {
