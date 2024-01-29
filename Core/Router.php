@@ -37,14 +37,19 @@ class Router
                 $action = static::getAction($controller);
 
                 if ($controller->before($action, static::$params)) {
-                    $data = call_user_func_array([$controller, $action], static::$params);
+                    $response = call_user_func_array([$controller, $action], static::$params);
                     $controller->after($action);
                 }
             }
         }
 
 
-        return json_response(200, $data);
+        return json_response(
+            $response['code'],
+        [
+            'data' => $response['body'],
+            'errors' => $response['errors']
+        ]);
     }
     static protected function getAction(Controller $controller): string
     {
@@ -74,7 +79,6 @@ class Router
 
     static protected function checkRequestMethod()
     {
-        d(static::$params, $_SERVER);
         if (array_key_exists('method', static::$params)) {
             $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 

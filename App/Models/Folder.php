@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Folder extends \Core\Model
+use Core\Model;
+
+class Folder extends Model
 {
     protected static string|null $tableName = 'folder';
 }

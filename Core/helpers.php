@@ -39,7 +39,7 @@ function json_response($code = 200, array $data = []): string
     (
         'code' => $code,
         'status' => $status[$code],
-        'data' => $data
+        ...$data
     ));
 }
 
