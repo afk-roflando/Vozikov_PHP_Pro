@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Control;
+namespace App\Control\Api;
 
 use App\Models\User;
 use App\Validators\Auth\AuthValidator;
 use App\Validators\Auth\RegisterValidator;
 use Core\Controller;
+use ReallySimpleJWT\Token;
 
 class AuthControl extends Controller
 {
@@ -29,21 +30,22 @@ class AuthControl extends Controller
         return $this->response(200, body:[], errors: $validator->getErrors());
     }
 
-    public function singin(): array
+    public function signin(): array
     {
         $data = requestBody();
         $validator = new AuthValidator();
 
-        if($validator->validate($data))
+        if ($validator->validate($data))
         {
             $user = User::findBy('email', $data['email']);
             if (password_verify($data['password'], $user->password))
             {
-                $token = random_bytes(32);
+                $expiration = time() + 3600;
+                $token = Token::create($user->id, $user->password, $expiration, 'localhost');
+
                 return $this->response(200, compact('token'));
             }
         }
-
         return $this->response(200, [], $validator->getErrors());
     }
 

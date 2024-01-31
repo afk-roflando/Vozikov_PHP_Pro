@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Core\Model;
-
-class User extends Model
+class User extends \Core\Model
 
 {
     protected static string|null $tableName = 'users';

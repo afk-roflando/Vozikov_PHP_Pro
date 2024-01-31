@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Core\Model;
-
-class SharedNote extends Model
+class SharedNote extends \Core\Model
 {
     protected static string|null $tableName = 'shared_notes';
 

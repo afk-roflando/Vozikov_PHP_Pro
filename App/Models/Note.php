@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Core\Model;
 
-class Note extends Model
+class Note extends \Core\Model
 {
     protected static string|null $tableName = 'notes';
 }

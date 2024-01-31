@@ -13,12 +13,9 @@ try {
     $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(BASE_DIR);
     $dotenv->load();
 
-
     die(\Core\Router::dispatch($_SERVER['REQUEST_URI']));
-
-} catch (PDOException $exception) {
-    dd("PDOException", $exception->getMessage());
-} catch (Exception $exception) {
-    dd("Exception", $exception->getMessage());
-}
-
+    }
+    catch (Exception $exception)
+    {
+        error_response($exception);
+    }
